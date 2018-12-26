@@ -25,10 +25,20 @@ export const styles = theme => ({
     maxWidth: theme.spacing.unit * 72,
   },
   paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
+    padding: theme.spacing.unit * 3,
     color: theme.palette.text.secondary,
   },
+  title: {
+    textAlign: 'center',
+  },
+  dropZone: {
+    border: '1px solid',
+    padding: theme.spacing.unit * 3,
+  },
+  actions: {
+    textAlign: 'right',
+  },
+
   '@keyframes App-logo-spin': {
     from: {
       transform: 'rotate(0deg)',
