@@ -18,6 +18,9 @@ export const styles = theme => ({
     fontSize: 'calc(10px + 2vmin)',
     color: 'white',
   },
+  button: {
+    marginRight: theme.spacing.unit,
+  },
   container: {
     display: 'table',
     margin: 'auto',
@@ -38,7 +41,12 @@ export const styles = theme => ({
   actions: {
     textAlign: 'right',
   },
-
+  form: {
+    padding: '40px 0',
+  },
+  stepper: {
+    padding: 0,
+  },
   '@keyframes App-logo-spin': {
     from: {
       transform: 'rotate(0deg)',
