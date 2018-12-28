@@ -8,7 +8,7 @@ import App from './App';
 
 ReactDOM.render(
   <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    <App />,
+    <App />
   </MuiPickersUtilsProvider>,
   document.getElementById('root')
 );
