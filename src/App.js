@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -18,6 +19,10 @@ import * as Yup from 'yup';
 import { styles } from './App.styles.js';
 import logo from './logo.svg';
 import AutocompleteComponent from './AutocompleteComponent'
+import { Select } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 
 const FILE_SIZE = 300000;
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
@@ -34,6 +39,20 @@ const suggestions = [
   { label: 'Barbados' },
   { label: 'Belarus' },
   { label: 'Belgium' },
+];
+const sellectables = [
+  { value: 'Afghanistan', label: 'Afghanistan' },
+  { value: 'Aland Islands', label: 'Aland Islands' },
+  { value: 'Albania', label: 'Albania' },
+  { value: 'Algeria', label: 'Algeria' },
+  { value: 'Austria', label: 'Austria' },
+  { value: 'Azerbaijan', label: 'Azerbaijan' },
+  { value: 'Bahamas', label: 'Bahamas' },
+  { value: 'Bahrain', label: 'Bahrain' },
+  { value: 'Bangladesh', label: 'Bangladesh' },
+  { value: 'Barbados', label: 'Barbados' },
+  { value: 'Belarus', label: 'Belarus' },
+  { value: 'Belgium', label: 'Belgium' },
 ];
 
 
@@ -57,10 +76,13 @@ const FormSchema = Yup.object().shape({
       is: true,
       then: Yup.string().required('Required').min(2, 'Too Short')
     }),
+  select: Yup.string()
+    .min(1, 'Select an Option!')
+    .required('Required'),
 });
 
 function getSteps() {
-  return ['Name', 'Date', 'Image', 'Optional', 'autocomplete'];
+  return ['Name', 'Date', 'Image', 'Optional', 'autocomplete', 'select'];
 }
 
 const CustomInputComponent = ({
@@ -106,9 +128,38 @@ const CustomCheckboxComponent = ({
     />
   );
 
+  const CustomSelectComponent = ({
+    field, // { name, value, onChange, onBlur }
+    form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+    ...props
+  }) => (
+    <FormControl fullWidth error={Boolean(touched[field.name] && errors[field.name])}>
+      <InputLabel htmlFor={field.name}>{props.label}</InputLabel>
+      <Select
+        name={field.name}
+        id={field.name}
+        value={field.value}
+        onChange={field.onChange}
+        inputProps={{
+          onBlur: field.onBlur
+        }}
+      >
+      {
+        props.list.map(options => (
+          <MenuItem value={options.value} key={options.value}>{options.label}</MenuItem>
+        )   
+          )
+      }
+      </Select>
+      {
+        (touched[field.name] && errors[field.name]) && <FormHelperText>{errors[field.name]}</FormHelperText>
+      }
+    </FormControl>
+    );
+
 class App extends Component {
   state = {
-    activeStep: 4,
+    activeStep: 5,
   };
 
   handleBack = () => {
@@ -125,7 +176,7 @@ class App extends Component {
 
   handleReset = () => {
     this.setState({
-      activeStep: 4,
+      activeStep: 0,
     });
   };
 
@@ -281,6 +332,20 @@ class App extends Component {
                     </Grid>
                   )
                 }
+                {
+                  activeStep === 5 && (
+                  <React.Fragment>
+                    <Grid item xs={12}>
+                    <Field
+                      name="select"
+                      label="Select"
+                      list={sellectables}
+                      component={CustomSelectComponent}
+                    />
+                  </Grid>
+                </React.Fragment>
+                  )
+                }
               </Grid>
             </form>
             <div>
@@ -313,7 +378,7 @@ class App extends Component {
                         Next
                       </Button>
                       {
-                        activeStep === 4 && (
+                        activeStep === 5 && (
                           <Button
                             variant="contained"
                             color="primary"
@@ -345,6 +410,7 @@ const MyEnhancedForm = withFormik({
     optional: false,
     optionaltextField: '',
     autocomplete: '',
+    select: '',
   }),
 
   // Custom sync validation
